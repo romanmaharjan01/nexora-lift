@@ -1,0 +1,7 @@
+.homePage { padding: 60px 24px; text-align: left; max-width: 940px; margin: 0 auto; }
+.homePage h1 { font-size: 3rem; margin-bottom: 14px; color: #1a1a1a; }
+.homePage p { font-size: 1.15rem; color: #4f4f4f; margin-bottom: 22px; }
+.homeActions { display: flex; gap: 12px; flex-wrap: wrap; }
+.homeBtn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 600; color: white; background: #b39b61; text-decoration: none; }
+.homeBtn:hover { opacity: 0.92; }
+.homeBtnGhost { background: #fff; border: 1px solid #b39b61; color: #0f0f0f; }
