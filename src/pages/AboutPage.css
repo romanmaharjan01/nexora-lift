@@ -1,3 +1,9 @@
-.aboutPage { padding: 60px 24px; max-width: 900px; margin: 0 auto; }
-.aboutPage h1 { font-size: 2.5rem; margin-bottom: 10px; }
-.aboutPage p { color: #4a4a4a; line-height: 1.68; margin-bottom: 14px; }
+.aboutPage { padding: clamp(40px, 6vw, 80px) 24px; max-width: 1000px; margin: 0 auto; }
+.aboutPage h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); margin-bottom: clamp(12px, 2vw, 20px); font-weight: 900; color: #1a1a1a; letter-spacing: -0.02em; animation: fadeInUp 0.7s ease-out; }
+.aboutPage > p:first-of-type { color: #6a6a6a; line-height: 1.8; margin-bottom: clamp(24px, 4vw, 36px); font-size: clamp(1rem, 2vw, 1.15rem); }
+.aboutPage p { color: #505050; line-height: 1.75; margin-bottom: clamp(16px, 2vw, 24px); font-size: clamp(0.95rem, 1.8vw, 1.05rem); }
+.aboutPage { background: linear-gradient(180deg, #fff 0%, #f9f7f4 100%); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 768px) {
+  .aboutPage { padding: 40px 20px; }
+}

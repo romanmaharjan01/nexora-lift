@@ -1,7 +1,15 @@
-.workPage { padding: 60px 24px; max-width: 1000px; margin: 0 auto; }
-.workPage h1 { font-size: 2.4rem; margin-bottom: 10px; }
-.workPage p { margin-bottom: 22px; color: #4b4b4b; }
-.workList { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
-.workItem { background: #fff; border-radius: 14px; padding: 16px; border: 1px solid #e3e3e3; }
-.workItem h3 { margin: 0 0 8px 0; font-size: 1.1rem; }
-.workItem p { margin: 0; color: #606060; }
+.workPage { padding: clamp(40px, 6vw, 80px) 24px; max-width: 1200px; margin: 0 auto; }
+.workPage h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); margin-bottom: clamp(12px, 2vw, 20px); font-weight: 900; color: #1a1a1a; letter-spacing: -0.02em; animation: fadeInUp 0.7s ease-out; }
+.workPage > p { margin-bottom: clamp(20px, 3vw, 32px); color: #6a6a6a; line-height: 1.8; font-size: clamp(1rem, 2vw, 1.15rem); }
+.workList { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(16px, 3vw, 28px); margin-top: clamp(28px, 4vw, 40px); }
+.workItem { background: linear-gradient(135deg, #fff 0%, #f9f7f4 100%); border-radius: 16px; padding: clamp(18px, 3vw, 28px); border: 1px solid #e8dfd5; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+.workItem::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #b39b61, #d4bb8e); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+.workItem:hover::before { transform: scaleX(1); }
+.workItem:hover { transform: translateY(-8px); box-shadow: 0 20px 48px rgba(179, 155, 97, 0.2); }
+.workItem h3 { margin: 0 0 clamp(8px, 1.5vw, 12px) 0; font-size: clamp(1.05rem, 2vw, 1.3rem); font-weight: 800; color: #1a1a1a; }
+.workItem p { margin: 0; color: #6a6a6a; line-height: 1.6; font-size: clamp(0.9rem, 1.5vw, 1rem); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 768px) {
+  .workPage { padding: 40px 20px; }
+  .workList { grid-template-columns: 1fr; }
+}

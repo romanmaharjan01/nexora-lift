@@ -1,78 +1,146 @@
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-  padding: 40px 20px;
+  background: linear-gradient(180deg, #f9f7f4 0%, #e8dfd5 50%, #f5f0e8 100%);
+  padding: clamp(30px, 5vw, 60px) 20px;
+  min-height: 100vh;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
-  max-width: 1200px;
+  margin-bottom: clamp(32px, 5vw, 50px);
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
+  animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dashboard-header h1 {
-  font-size: 32px;
-  color: #333;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: #1a1a1a;
   margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.01em;
 }
 
 .logout-button {
-  padding: 10px 20px;
-  background: #c33;
+  padding: clamp(10px, 2vw, 14px) clamp(18px, 3vw, 28px);
+  background: linear-gradient(135deg, #d65a5a 0%, #c33 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 12px;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 20px rgba(214, 90, 90, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .logout-button:hover {
-  background: #a22;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(214, 90, 90, 0.4);
+}
+
+.logout-button:active {
+  transform: translateY(-1px);
 }
 
 .dashboard-content {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 .welcome-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  padding: 40px;
+  background: linear-gradient(135deg, #fff 0%, #f9f7f4 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.08);
+  padding: clamp(30px, 5vw, 50px);
+  border: 1px solid rgba(179, 155, 97, 0.1);
+  animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
 }
 
 .welcome-card h2 {
   margin-top: 0;
-  font-size: 24px;
-  color: #333;
+  margin-bottom: clamp(16px, 2vw, 24px);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: #1a1a1a;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .welcome-card p {
-  color: #666;
-  font-size: 16px;
-  line-height: 1.6;
+  color: #6a6a6a;
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  line-height: 1.7;
+  margin-bottom: clamp(16px, 2vw, 24px);
 }
 
 .user-info {
-  background: #f9f9f9;
+  background: linear-gradient(135deg, rgba(179, 155, 97, 0.05) 0%, transparent 100%);
   border-left: 4px solid #b39b61;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
+  border: 1px solid rgba(179, 155, 97, 0.15);
+  border-left: 4px solid #b39b61;
+  padding: clamp(18px, 3vw, 28px);
+  margin-top: clamp(20px, 3vw, 32px);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(249, 247, 244, 0.6) 100%);
+  backdrop-filter: blur(10px);
 }
 
 .user-info p {
-  margin: 10px 0;
-  font-size: 14px;
+  margin: clamp(10px, 1.5vw, 16px) 0;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  color: #505050;
+  line-height: 1.6;
 }
 
 .user-info strong {
-  color: #333;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 30px 20px;
+  }
+  .dashboard-header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .logout-button {
+    width: 100%;
+    text-align: center;
+  }
 }

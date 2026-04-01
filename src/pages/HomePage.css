@@ -1,7 +1,35 @@
-.homePage { padding: 60px 24px; text-align: left; max-width: 940px; margin: 0 auto; }
-.homePage h1 { font-size: 3rem; margin-bottom: 14px; color: #1a1a1a; }
-.homePage p { font-size: 1.15rem; color: #4f4f4f; margin-bottom: 22px; }
-.homeActions { display: flex; gap: 12px; flex-wrap: wrap; }
-.homeBtn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 600; color: white; background: #b39b61; text-decoration: none; }
-.homeBtn:hover { opacity: 0.92; }
-.homeBtnGhost { background: #fff; border: 1px solid #b39b61; color: #0f0f0f; }
+.homePage { padding: clamp(40px, 6vw, 80px) 24px; max-width: 1280px; margin: 0 auto; }
+.heroSplit { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(30px, 5vw, 60px); align-items: center; margin-bottom: clamp(50px, 8vw, 80px); animation: fadeInUp 0.8s ease-out; }
+.eyebrow { color: #b39b61; font-size: clamp(0.75rem, 2vw, 0.9rem); letter-spacing: 0.25em; text-transform: uppercase; font-weight: 700; margin-bottom: clamp(12px, 2vw, 18px); opacity: 0.85; }
+.heroSplit h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); margin-bottom: clamp(16px, 3vw, 24px); line-height: 1.15; font-weight: 900; color: #1a1a1a; letter-spacing: -0.02em; }
+.heroLead { margin-bottom: clamp(20px, 3vw, 32px); font-size: clamp(1rem, 2vw, 1.15rem); color: #5a5a5a; max-width: 560px; line-height: 1.7; }
+.heroActions { display: flex; gap: clamp(10px, 2vw, 16px); flex-wrap: wrap; margin-bottom: clamp(24px, 4vw, 36px); }
+.homeBtn { display: inline-block; padding: clamp(11px, 2vw, 15px) clamp(20px, 4vw, 28px); border-radius: 12px; font-weight: 700; color: white; background: linear-gradient(135deg, #b39b61 0%, #d4bb8e 100%); text-decoration: none; box-shadow: 0 12px 32px rgba(179, 155, 97, 0.3); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; border: none; font-size: 1rem; }
+.homeBtn:hover { transform: translateY(-4px); box-shadow: 0 18px 48px rgba(179, 155, 97, 0.4); }
+.homeBtn:active { transform: translateY(-1px); }
+.homeBtnGhost { background: transparent; border: 2px solid #b39b61; color: #1a1a1a; box-shadow: none; }
+.homeBtnGhost:hover { background: #f5f5f5; }
+.heroPanelWrap { display: grid; grid-template-columns: 1fr; gap: clamp(12px, 2vw, 16px); }
+.heroPanel { border: 1.5px solid #e0dbd2; border-radius: 16px; background: linear-gradient(135deg, #fff 0%, #fafaf7 100%); text-align: left; padding: clamp(14px, 3vw, 22px); cursor: pointer; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+.heroPanel::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: left 0.5s ease; }
+.heroPanel:hover::before { left: 100%; }
+.heroPanel strong { display: block; font-size: clamp(1rem, 2vw, 1.25rem); margin-bottom: clamp(10px, 2vw, 14px); color: #1a1a1a; font-weight: 800; }
+.heroPanel p { margin: 0; color: #3f3f3f; line-height: 1.65; font-size: clamp(0.9rem, 1.5vw, 1rem); }
+.heroPanel:hover, .heroPanelActive { border-color: #b39b61; box-shadow: 0 16px 40px rgba(179, 155, 97, 0.25); transform: translateY(-4px); background: linear-gradient(135deg, #fffbf7 0%, #f5f0e8 100%); }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(16px, 3vw, 24px); margin-top: clamp(40px, 6vw, 60px); }
+.metric { background: linear-gradient(135deg, #fff 0%, #f9f7f4 100%); border: 1px solid #e8e3d8; border-radius: 16px; padding: clamp(20px, 4vw, 32px); transition: all 0.3s ease; text-align: center; }
+.metric:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(0,0,0,0.1); border-color: #b39b61; }
+.metric h3 { margin: 0 0 clamp(8px, 1vw, 12px); font-size: clamp(1rem, 2vw, 1.3rem); color: #1a1a1a; font-weight: 800; }
+.metric p { margin: 0; color: #6a6a6a; line-height: 1.6; font-size: clamp(0.9rem, 1.5vw, 1rem); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 980px) {
+  .heroSplit { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .homeBtn { width: 100%; text-align: center; }
+}
+@media (max-width: 640px) {
+  .homePage { padding: 40px 20px; }
+  .heroActions { flex-direction: column; }
+  .homeBtn { width: 100%; }
+}
+

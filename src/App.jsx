@@ -3,10 +3,14 @@ import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import logo from './assets/nexora-logo.png'
 import './App.css'
 import { AuthProvider, AuthContext } from './contexts/AuthContext'
+import { AdminProvider } from './contexts/AdminContext'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import AdminProtectedRoute from './components/AdminProtectedRoute'
+import AdminLoginPage from './pages/AdminLoginPage'
+import AdminDashboard from './pages/AdminDashboard'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import GoalPage from './pages/GoalPage'
@@ -19,8 +23,9 @@ function AppContent() {
   const { user } = useContext(AuthContext)
 
   const isAuthPage = ['/login', '/register'].includes(location.pathname)
+  const isAdminPage = ['/admin-login', '/admin-dashboard'].includes(location.pathname)
   const isDashboard = location.pathname === '/dashboard'
-  const showLayout = !isAuthPage && !isDashboard
+  const showLayout = !isAuthPage && !isAdminPage && !isDashboard
 
   return (
     <div className="page">
@@ -77,6 +82,8 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/admin-login" element={<AdminLoginPage />} />
+          <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/goal" element={<GoalPage />} />
@@ -106,9 +113,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <AdminProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </AdminProvider>
   )
 }
 

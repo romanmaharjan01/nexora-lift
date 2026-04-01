@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../firebase-config'
 import { useNavigate, Link } from 'react-router-dom'
+import { getFirebaseErrorMessage } from '../utils/errorMessages'
 import './AuthPages.css'
 
 export function RegisterPage() {
@@ -39,7 +40,7 @@ export function RegisterPage() {
 
       navigate('/dashboard')
     } catch (err) {
-      setError(err.message)
+      setError(getFirebaseErrorMessage(err.code))
     } finally {
       setLoading(false)
     }
