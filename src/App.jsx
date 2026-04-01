@@ -433,7 +433,7 @@ function ContactPage() {
 
           <form
             className="form"
-            action="mailto:hello@nexoralift.com"
+            action="mailto:nexoralift@gmail.com"
             method="post"
             encType="text/plain"
           >
