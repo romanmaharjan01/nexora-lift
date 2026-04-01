@@ -24,6 +24,53 @@ export const getFirebaseErrorMessage = (errorCode) => {
 };
 
 /**
+ * Validate password strength and return specific error messages
+ */
+export const validatePassword = (password) => {
+  const errors = [];
+
+  if (!password) {
+    return ['Password is required'];
+  }
+
+  if (password.length < 8) {
+    errors.push(`At least 8 characters (currently ${password.length})`);
+  }
+
+  if (!/[a-z]/.test(password)) {
+    errors.push('At least one lowercase letter (a-z)');
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    errors.push('At least one uppercase letter (A-Z)');
+  }
+
+  if (!/\d/.test(password)) {
+    errors.push('At least one number (0-9)');
+  }
+
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+    errors.push('At least one special character (!@#$%^&* etc.)');
+  }
+
+  return errors;
+};
+
+/**
+ * Validate email format
+ */
+export const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) {
+    return 'Email is required';
+  }
+  if (!emailRegex.test(email)) {
+    return 'Please enter a valid email address';
+  }
+  return null;
+};
+
+/**
  * Get admin-specific error messages
  */
 export const getAdminErrorMessage = (errorCode) => {
@@ -34,3 +81,4 @@ export const getAdminErrorMessage = (errorCode) => {
 
   return errorMessages[errorCode] || getFirebaseErrorMessage(errorCode);
 };
+

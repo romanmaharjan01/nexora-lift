@@ -69,6 +69,41 @@
   color: #1a1a1a;
 }
 
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 48px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: clamp(12px, 2vw, 16px);
+  background: none;
+  border: none;
+  color: #b39b61;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password-btn:hover {
+  transform: scale(1.1);
+  color: #d4bb8e;
+}
+
+.toggle-password-btn:active {
+  transform: scale(0.95);
+}
+
 .form-group input::placeholder {
   color: #a89a8a;
 }
@@ -91,6 +126,59 @@
   border: 1px solid rgba(214, 90, 90, 0.2);
   border-left: 4px solid #d65a5a;
   animation: shake 0.3s ease-in-out;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.password-requirements {
+  background: linear-gradient(135deg, #f5f0e8 0%, #fafaf8 100%);
+  border: 1px solid #e8dfd5;
+  border-radius: 10px;
+  padding: clamp(12px, 2vw, 16px);
+  margin-top: clamp(10px, 1.5vw, 14px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.req-title {
+  margin: 0 0 8px 0;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.req-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.req-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  color: #d65a5a;
+  margin: 0;
+}
+
+.req-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(214, 90, 90, 0.15);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
 }
 
 .auth-button {

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../firebase-config'
 import { useNavigate, Link } from 'react-router-dom'
-import { getFirebaseErrorMessage } from '../utils/errorMessages'
+import { getFirebaseErrorMessage, validatePassword, validateEmail } from '../utils/errorMessages'
 import './AuthPages.css'
 
 export function RegisterPage() {
@@ -11,20 +11,49 @@ export function RegisterPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+  const [passwordErrors, setPasswordErrors] = useState([])
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  const handlePasswordChange = (value) => {
+    setPassword(value)
+    if (value) {
+      const errors = validatePassword(value)
+      setPasswordErrors(errors)
+    } else {
+      setPasswordErrors([])
+    }
+  }
 
   const handleRegister = async (e) => {
     e.preventDefault()
     setError('')
 
+    // Validate email
+    const emailError = validateEmail(email)
+    if (emailError) {
+      setError(emailError)
+      return
+    }
+
+    // Validate password strength
+    const pwdErrors = validatePassword(password)
+    if (pwdErrors.length > 0) {
+      setError('Password does not meet requirements:\n' + pwdErrors.map(e => '• ' + e).join('\n'))
+      return
+    }
+
+    // Check password match
     if (password !== confirmPassword) {
       setError('Passwords do not match')
       return
     }
 
-    if (password.length < 6) {
-      setError('Password should be at least 6 characters')
+    // Check if name is provided
+    if (!name.trim()) {
+      setError('Full name is required')
       return
     }
 
@@ -77,31 +106,63 @@ export function RegisterPage() {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
+            <div className="password-input-wrapper">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => handlePasswordChange(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? '👁️' : '👁️‍🗨️'}
+              </button>
+            </div>
+            {passwordErrors.length > 0 && (
+              <div className="password-requirements">
+                <p className="req-title">Password must have:</p>
+                <ul className="req-list">
+                  {passwordErrors.map((err, idx) => (
+                    <li key={idx} className="req-item">
+                      <span className="req-icon">✕</span> {err}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
+            <div className="password-input-wrapper">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+              >
+                {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+              </button>
+            </div>
           </div>
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" disabled={loading} className="auth-button">
+          <button type="submit" disabled={loading || passwordErrors.length > 0} className="auth-button">
             {loading ? 'Creating account...' : 'Register'}
           </button>
         </form>
