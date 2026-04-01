@@ -1,11 +1,41 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import logo from './assets/nexora-logo.png'
 import './App.css'
+import { AuthProvider, AuthContext } from './contexts/AuthContext'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { DashboardPage } from './pages/DashboardPage'
+import { ProtectedRoute } from './components/ProtectedRoute'
 
-function App() {
+function AppContent() {
   const location = useLocation()
+  const { user } = useContext(AuthContext)
 
+  // Check if current route is an auth page
+  const isAuthPage = ['/login', '/register'].includes(location.pathname)
+  const isDashboard = location.pathname === '/dashboard'
+
+  // If on dashboard or auth pages, show minimal layout
+  if (isDashboard || isAuthPage) {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    )
+  }
+
+  // Otherwise show main site with header and footer
   return (
     <div className="page">
       <header className="header">
@@ -27,8 +57,19 @@ function App() {
             <TopNavLink to="/about">About</TopNavLink>
             <TopNavLink to="/goal">Our Goal</TopNavLink>
             <TopNavLink to="/mission">Mission</TopNavLink>
+            {user ? (
+              <>
+                <NavLink className="btn btnSmall" to="/dashboard">
+                  Dashboard
+                </NavLink>
+              </>
+            ) : (
+              <NavLink className="btn btnSmall" to="/login">
+                Login
+              </NavLink>
+            )}
             <NavLink className="btn btnSmall" to="/contact">
-              Let’s Talk
+              Let's Talk
             </NavLink>
           </nav>
 
@@ -49,6 +90,15 @@ function App() {
               <MobileNavLink to="/mission" currentPath={location.pathname}>
                 Mission
               </MobileNavLink>
+              {user ? (
+                <MobileNavLink to="/dashboard" currentPath={location.pathname}>
+                  Dashboard
+                </MobileNavLink>
+              ) : (
+                <MobileNavLink to="/login" currentPath={location.pathname}>
+                  Login
+                </MobileNavLink>
+              )}
               <NavLink className="btn" to="/contact">
                 Book a Call
               </NavLink>
@@ -84,6 +134,14 @@ function App() {
         </div>
       </footer>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
@@ -148,165 +206,82 @@ function HomePage() {
           <div className="metrics">
             <div className="metric">
               <div className="metricValue">Strategy</div>
-              <div className="metricLabel">clear plans that perform</div>
+              <div className="metricLabel">Deep-dive planning & positioning</div>
             </div>
             <div className="metric">
               <div className="metricValue">Creative</div>
-              <div className="metricLabel">design + content that resonates</div>
+              <div className="metricLabel">Bold designs that stand out</div>
             </div>
             <div className="metric">
               <div className="metricValue">Growth</div>
-              <div className="metricLabel">measurable, sustainable results</div>
+              <div className="metricLabel">Data-driven performance marketing</div>
             </div>
           </div>
         </div>
 
-        <div className="heroCard heroCardFramed" aria-label="Highlights">
-          <div className="heroCardTop">
+        <div className="heroGraphic">
+          <div className="heroPanels">
             <button
-              type="button"
-              className={`heroBadge heroBadgeBtn ${heroPanel === 'founded' ? 'heroBadgeActive' : ''}`}
+              className={`heroPanel heroPanelLeft ${heroPanel === 'founded' ? 'heroPanelActive' : ''}`}
               onClick={toggleFounded}
-              aria-pressed={heroPanel === 'founded'}
             >
-              Founded 2020
+              <div className="heroPanelLabel">Founded</div>
+              <div className="heroPanelContent">
+                <p>We launched Nexora Lift with a singular mission: to partner with visionary brands and help them reach their full potential through authentic, results-driven marketing.</p>
+              </div>
             </button>
             <button
-              type="button"
-              className={`heroBadge heroBadgeAlt heroBadgeBtn ${heroPanel === 'fullservice' ? 'heroBadgeActive' : ''}`}
+              className={`heroPanel heroPanelRight ${heroPanel === 'fullservice' ? 'heroPanelActive' : ''}`}
               onClick={toggleFullService}
-              aria-pressed={heroPanel === 'fullservice'}
             >
-              Full-service
+              <div className="heroPanelLabel">Full-Service</div>
+              <div className="heroPanelContent">
+                <p>From brand strategy and creative design to paid advertising and growth hacking, we handle it all. One unified team, one cohesive vision for your success.</p>
+              </div>
             </button>
-          </div>
-
-          <div className="heroPanelStage">
-            <div className="heroPanelTrack" key={heroPanel ?? 'default'}>
-              {heroPanel === null && (
-                <div className="heroSlidePane">
-                  <h2 className="heroCardTitle">Elevate your brand across industries.</h2>
-                  <p className="heroCardText">
-                    We don’t just create beautiful campaigns—we build strategies that
-                    drive conversions and unlock growth. Tap the badges above to read
-                    our story or see what full service includes.
-                  </p>
-                  <ul className="checklist" aria-label="What you get">
-                    <li>Positioning & messaging that feels authentic</li>
-                    <li>Campaigns engineered for performance</li>
-                    <li>Reporting built around real business goals</li>
-                  </ul>
-                </div>
-              )}
-
-              {heroPanel === 'founded' && (
-                <div className="heroSlidePane heroSlidePaneFounded">
-                  <p className="heroFoundedText">
-                    Nexora Lift began in 2020 with one belief: marketing should feel
-                    like a real partnership—not a one-way pitch. We’re a focused team
-                    of strategists and creatives who help brands grow with clarity,
-                    craft, and measurable outcomes.
-                  </p>
-                  <p className="heroFoundedText">
-                    From first campaigns to long-term retainers, we work shoulder to
-                    shoulder with founders and marketing leaders who want marketing
-                    that finally matches their ambition.
-                  </p>
-                </div>
-              )}
-
-              {heroPanel === 'fullservice' && (
-                <div className="heroSlidePane heroSlidePaneServices">
-                  <p className="heroFullLead">
-                    Full service means one partner for the whole journey—strategy,
-                    creative, channels, and measurement—so nothing falls through the
-                    cracks.
-                  </p>
-                  <ul className="heroFullList" aria-label="Full-service offerings">
-                    <li>
-                      <strong>Brand & strategy</strong> — positioning, messaging,
-                      go-to-market
-                    </li>
-                    <li>
-                      <strong>Creative & content</strong> — copy, design, storytelling
-                    </li>
-                    <li>
-                      <strong>Paid & organic</strong> — paid media, social, SEO
-                    </li>
-                    <li>
-                      <strong>Lifecycle & web</strong> — email, landing pages,
-                      CRO-friendly sites
-                    </li>
-                    <li>
-                      <strong>Analytics</strong> — reporting tied to real business
-                      goals
-                    </li>
-                  </ul>
-                  <NavLink className="heroCardMore heroCardMoreInline" to="/contact">
-                    Book a call to map your stack →
-                  </NavLink>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
-      <div className="heroGlow" aria-hidden="true" />
     </section>
   )
 }
 
 function AboutPage() {
   return (
-    <section className="section pageSection">
+    <section className="aboutPage">
       <div className="container">
-        <div className="sectionHead sectionHeadCenter">
-          <p className="kicker">Where It All Began</p>
-          <h2 className="sectionTitle">
-            Built on partnership, powered by creativity.
-          </h2>
-          <p className="sectionLead">
-            Founded in 2020, Nexora Lift emerged from a simple belief: businesses
-            deserve marketing that truly understands their vision. What started as
-            a small team of passionate creatives has grown into a full-service
-            marketing agency dedicated to elevating brands across industries.
-          </p>
+        <div className="sectionHeader">
+          <p className="kicker">About Us</p>
+          <h2 className="sectionTitle">Who we are & what we believe</h2>
         </div>
 
-        <div className="split">
-          <div className="card cardSoft">
-            <h3 className="cardTitle">The gap we saw</h3>
-            <p className="cardText">
-              Businesses needed more than just campaigns; they needed partners who
-              could blend strategy with creativity to deliver measurable results.
+        <div className="aboutGrid">
+          <div className="aboutCard">
+            <h3>Our Story</h3>
+            <p>
+              Nexora Lift was founded by a team of marketing strategists, creative directors, and growth experts who believed that brands deserve more than surface-level campaigns. We saw a gap in the market for agencies that combine deep strategic thinking with bold creative execution.
             </p>
-            <div className="pillRow" aria-label="Values">
-              <span className="pill">Team collaboration</span>
-              <span className="pill">Business growth</span>
-              <span className="pill">Measurable outcomes</span>
-            </div>
           </div>
 
-          <div className="card">
-            <h3 className="cardTitle">What we do today</h3>
-            <p className="cardText">
-              We craft end-to-end marketing experiences—strategy, creative, and
-              optimization—so every touchpoint supports your growth.
+          <div className="aboutCard">
+            <h3>Our Values</h3>
+            <p>
+              We believe in transparency, collaboration, and measurable results. Your success is our success. We don't do cookie-cutter solutions—every strategy is tailored to your unique goals and market position.
             </p>
-            <div className="grid3">
-              <div className="mini">
-                <div className="miniTitle">Brand Strategy</div>
-                <div className="miniText">clarity, positioning, messaging</div>
-              </div>
-              <div className="mini">
-                <div className="miniTitle">Campaign Creative</div>
-                <div className="miniText">content, design, storytelling</div>
-              </div>
-              <div className="mini">
-                <div className="miniTitle">Performance</div>
-                <div className="miniText">testing, tracking, iteration</div>
-              </div>
-            </div>
+          </div>
+
+          <div className="aboutCard">
+            <h3>Our Team</h3>
+            <p>
+              Our team brings decades of combined experience across strategy, design, copywriting, paid advertising, SEO, and brand building. We're curious, collaborative, and constantly innovating.
+            </p>
+          </div>
+
+          <div className="aboutCard">
+            <h3>Our Approach</h3>
+            <p>
+              We start with discovery. We get to know your brand, your audience, your competition, and your goals. From there, we build a integrated strategy that touches every customer touchpoint.
+            </p>
           </div>
         </div>
       </div>
@@ -316,55 +291,39 @@ function AboutPage() {
 
 function GoalPage() {
   return (
-    <section className="section sectionAlt pageSection">
+    <section className="goalPage">
       <div className="container">
-        <div className="split splitReverse">
-          <div className="card">
-            <p className="kicker">Our Goal</p>
-            <h2 className="sectionTitle">Driving Measurable Growth</h2>
-            <p className="cardText">
-              Our goal is simple yet ambitious: to help every client achieve
-              exceptional growth through strategic marketing that delivers real,
-              measurable results.
-            </p>
-            <p className="cardText">
-              Whether you’re a startup finding your voice or an established brand
-              seeking reinvention, we craft solutions that amplify your presence
-              and accelerate your success.
-            </p>
+        <div className="sectionHeader">
+          <p className="kicker">Our Goal</p>
+          <h2 className="sectionTitle">Elevate your brand to new heights</h2>
+          <p className="sectionLead">
+            We're dedicated to helping businesses transform their marketing and unlock new levels of growth. Here's what we aim to deliver for every client:
+          </p>
+        </div>
+
+        <div className="goalGrid">
+          <div className="goalCard">
+            <div className="goalIcon">📈</div>
+            <h3>Measurable Growth</h3>
+            <p>We focus on metrics that matter: conversions, revenue, market share. Every campaign is tied to clear KPIs.</p>
           </div>
 
-          <div className="card cardSoft">
-            <h3 className="cardTitle">How we build growth</h3>
-            <ul className="steps" aria-label="Growth approach">
-              <li>
-                <span className="stepNum">01</span>
-                <div>
-                  <div className="stepTitle">Strategy first</div>
-                  <div className="stepText">
-                    We align goals, audience, and messaging before launching.
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span className="stepNum">02</span>
-                <div>
-                  <div className="stepTitle">Creative that converts</div>
-                  <div className="stepText">
-                    We design experiences that earn attention and drive action.
-                  </div>
-                </div>
-              </li>
-              <li>
-                <span className="stepNum">03</span>
-                <div>
-                  <div className="stepTitle">Measure, learn, improve</div>
-                  <div className="stepText">
-                    We optimize continuously to keep performance trending up.
-                  </div>
-                </div>
-              </li>
-            </ul>
+          <div className="goalCard">
+            <div className="goalIcon">💡</div>
+            <h3>Strategic Innovation</h3>
+            <p>We challenge convention and explore new channels, techniques, and platforms to keep your brand ahead of the curve.</p>
+          </div>
+
+          <div className="goalCard">
+            <div className="goalIcon">✨</div>
+            <h3>Brand Excellence</h3>
+            <p>Your brand voice, visual identity, and message should be unmistakable. We craft brands that resonate and endure.</p>
+          </div>
+
+          <div className="goalCard">
+            <div className="goalIcon">🤝</div>
+            <h3>True Partnership</h3>
+            <p>We're not just vendors—we're an extension of your team, invested in your long-term success and growth.</p>
           </div>
         </div>
       </div>
@@ -374,99 +333,31 @@ function GoalPage() {
 
 function MissionPage() {
   return (
-    <section className="section pageSection">
+    <section className="missionPage">
       <div className="container">
-        <div className="mission">
-          <div className="missionCopy">
-            <p className="kicker">Our Mission</p>
-            <h2 className="sectionTitle">
-              Empowering Brands to Reach Their Full Potential
-            </h2>
-            <p className="sectionLead">
-              We believe every brand has a unique story worth telling. Our mission
-              is to amplify that story through innovative strategies, creative
-              excellence, and unwavering dedication to our clients’ success. We’re
-              not just marketers—we’re partners in your journey to greatness.
-            </p>
-          </div>
-          <div className="quote" aria-label="Brand promise">
-            <div className="quoteMark" aria-hidden="true">
-              “”
-            </div>
-            <p className="quoteText">
-              We don’t chase vanity metrics. We build marketing you can feel—and
-              results you can measure.
-            </p>
-            <div className="quoteBy">Nexora Lift Team</div>
-          </div>
+        <div className="sectionHeader">
+          <p className="kicker">Our Mission</p>
+          <h2 className="sectionTitle">Empower brands through smart, bold marketing</h2>
+          <p className="sectionLead">
+            Our mission is simple: to be the marketing partner that brands trust to drive growth, build loyalty, and create lasting impact in their industries.
+          </p>
         </div>
-      </div>
-    </section>
-  )
-}
 
-function ContactPage() {
-  return (
-    <section className="section sectionAlt pageSection">
-      <div className="container">
-        <div className="contact">
-          <div>
-            <p className="kicker">Contact</p>
-            <h2 className="sectionTitle">Ready to elevate your brand?</h2>
-            <p className="sectionLead">
-              Tell us what you’re building. We’ll respond with next steps and a
-              simple plan to move forward.
-            </p>
-            <div className="contactGrid">
-              <div className="contactCard">
-                <div className="contactLabel">Email</div>
-                <a className="contactValue" href="mailto:hello@nexoralift.com">
-                  hello@nexoralift.com
-                </a>
-              </div>
-              <div className="contactCard">
-                <div className="contactLabel">Response time</div>
-                <div className="contactValue">Within 24–48 hours</div>
-              </div>
-            </div>
+        <div className="missionValues">
+          <div className="value">
+            <h3>Strategic Clarity</h3>
+            <p>We believe every brand has a unique position in the market. Our job is to uncover it, articulate it, and leverage it.</p>
           </div>
 
-          <form
-            className="form"
-            action="mailto:nexoralift@gmail.com"
-            method="post"
-            encType="text/plain"
-          >
-            <label className="field">
-              <span className="fieldLabel">Name</span>
-              <input className="input" name="name" placeholder="Your name" required />
-            </label>
-            <label className="field">
-              <span className="fieldLabel">Email</span>
-              <input
-                className="input"
-                type="email"
-                name="email"
-                placeholder="you@example.com"
-                required
-              />
-            </label>
-            <label className="field">
-              <span className="fieldLabel">Message</span>
-              <textarea
-                className="input textarea"
-                name="message"
-                placeholder="Tell us about your business and goals..."
-                required
-              />
-            </label>
-            <button className="btn" type="submit">
-              Send Message
-            </button>
-            <p className="formNote">
-              This opens your email app to send the message.
-            </p>
-          </form>
+          <div className="value">
+            <h3>Creative Courage</h3>
+            <p>We're not afraid to be different. Great marketing often breaks the rules—and we're here to help you do that responsibly.</p>
+          </div>
+
+          <div className="value">
+            <h3>Data Intelligence</h3>
+            <p>Strategy without data is guesswork. We use advanced analytics, market research, and testing to validate every decision.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -474,10 +365,10 @@ function ContactPage() {
 }
 
 function WorkPage() {
-  const projects = [
+  const works = [
     {
-      title: "E-commerce Brand Relaunch",
-      category: "Brand Strategy & Creative",
+      title: "E-Commerce Brand Refresh",
+      category: "Brand Strategy & Design",
       description: "Complete brand refresh for a fashion retailer, including new positioning, visual identity, and campaign strategy that increased conversions by 40%.",
       results: "40% conversion increase"
     },
@@ -507,37 +398,105 @@ function WorkPage() {
     },
     {
       title: "B2B Content Strategy",
-      category: "Content Marketing & Lead Gen",
-      description: "Content marketing strategy for a B2B tech company, developing thought leadership content and lead magnets that generated high-quality inbound leads.",
-      results: "150% lead increase"
+      category: "Content Marketing",
+      description: "Developed a comprehensive content marketing strategy for a B2B tech company, producing thought leadership articles, case studies, and webinars.",
+      results: "25% lead quality improvement"
     }
   ]
 
   return (
-    <section className="section pageSection">
+    <section className="workPage">
       <div className="container">
-        <div className="sectionHead sectionHeadCenter">
+        <div className="sectionHeader">
           <p className="kicker">Our Work</p>
-          <h2 className="sectionTitle">
-            Projects that drive results.
-          </h2>
+          <h2 className="sectionTitle">Recent campaigns & projects</h2>
           <p className="sectionLead">
-            From brand transformations to performance campaigns, here are some of the projects
-            we've helped bring to life. Each one showcases our commitment to strategy, creativity, and measurable growth.
+            Here's a selection of recent work that showcases our strategy, creativity, and results across various industries.
           </p>
         </div>
 
         <div className="workGrid">
-          {projects.map((project, index) => (
+          {works.map((work, index) => (
             <div key={index} className="workCard">
-              <div className="workCardCategory">{project.category}</div>
-              <h3 className="workCardTitle">{project.title}</h3>
-              <p className="workCardText">{project.description}</p>
-              <div className="workCardResult">{project.results}</div>
+              <div className="workCategory">{work.category}</div>
+              <h3>{work.title}</h3>
+              <p>{work.description}</p>
+              <div className="workResult">
+                <strong>Result:</strong> {work.results}
+              </div>
             </div>
           ))}
         </div>
       </div>
+    </section>
+  )
+}
+
+function ContactPage() {
+  return (
+    <section className="contactPage">
+      <div>
+        <p className="kicker">Contact</p>
+        <h2 className="sectionTitle">Ready to elevate your brand?</h2>
+        <p className="sectionLead">
+          Tell us what you're building. We'll respond with next steps and a
+          simple plan to move forward.
+        </p>
+        <div className="contactGrid">
+          <div className="contactCard">
+            <div className="contactLabel">Email</div>
+            <a className="contactValue" href="mailto:nexoralift@gmail.com">
+              nexoralift@gmail.com
+            </a>
+          </div>
+          <div className="contactCard">
+            <div className="contactLabel">Response time</div>
+            <div className="contactValue">Within 24–48 hours</div>
+          </div>
+        </div>
+      </div>
+
+      <form className="contactForm">
+        <div className="formRow">
+          <div className="formField">
+            <span className="fieldLabel">Name</span>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your name"
+              required
+            />
+          </div>
+
+          <div className="formField">
+            <span className="fieldLabel">Email</span>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="formField">
+          <span className="fieldLabel">Message</span>
+          <textarea
+            name="message"
+            placeholder="Tell us about your business and goals..."
+            rows="6"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" className="btn">
+          Send Message
+        </button>
+
+        <p className="formHint">
+          This opens your email app to send the message.
+        </p>
+      </form>
     </section>
   )
 }

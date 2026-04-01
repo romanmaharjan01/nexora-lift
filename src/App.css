@@ -601,27 +601,98 @@
   color: var(--text-strong);
 }
 
+.heroGraphic {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.heroPanels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: min(540px, 100%);
+}
+
+.heroPanel {
+  border: 1px solid rgba(77, 81, 88, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 8px rgba(18, 20, 22, 0.08);
+  text-align: center;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  line-height: 1.5;
+}
+
+.heroPanel:hover,
+.heroPanelActive {
+  transform: translateY(-2px);
+  border-color: rgba(179, 155, 97, 0.8);
+  box-shadow: 0 10px 24px rgba(18, 20, 22, 0.14);
+}
+
+.heroPanelLabel {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #2a2b2e;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 6px;
+}
+
+.heroPanelContent {
+  margin-top: 10px;
+  padding: 0 5px;
+  color: #222;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.heroPanelContent p {
+  margin: 0;
+}
+
 .heroPanelStage {
-  margin-top: 6px;
+  margin-top: 14px;
   position: relative;
   overflow: hidden;
   border-radius: 16px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .heroPanelTrack {
   animation: heroPanelSlideIn 0.48s var(--ease-out-expo) both;
   will-change: transform, opacity;
+  display: grid;
+  gap: 14px;
+  padding: 14px;
 }
 
 .heroSlidePane {
-  padding-top: 4px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 18px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.heroFoundedText {
-  margin: 0 0 12px;
-  font-size: 14px;
-  line-height: 1.68;
-  color: var(--text);
+.heroSlidePane:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.heroFoundedText,
+.heroFullLead {
+  margin: 0 0 10px;
+  color: rgba(20, 28, 40, 0.9);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .heroFoundedText:last-child {
