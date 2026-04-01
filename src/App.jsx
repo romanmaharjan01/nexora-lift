@@ -64,6 +64,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/goal" element={<GoalPage />} />
           <Route path="/mission" element={<MissionPage />} />
+          <Route path="/work" element={<WorkPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
@@ -75,27 +76,7 @@ function App() {
             <div className="brandLogoWrap footerLogoWrap">
               <img src={logo} alt="" className="brandLogo" />
             </div>
-            <div>
-              <div className="footerName">Nexora Lift</div>
-              <div className="footerTag">Strategy • Creative • Growth</div>
-            </div>
-          </div>
-          <div className="footerLinks">
-            <NavLink className="footerLinkBtn" to="/">
-              Home
-            </NavLink>
-            <NavLink className="footerLinkBtn" to="/about">
-              About
-            </NavLink>
-            <NavLink className="footerLinkBtn" to="/goal">
-              Our Goal
-            </NavLink>
-            <NavLink className="footerLinkBtn" to="/mission">
-              Mission
-            </NavLink>
-            <NavLink className="footerLinkBtn" to="/contact">
-              Contact
-            </NavLink>
+            <div className="footerTag">Elevating Brands With Excellence</div>
           </div>
           <div className="footerCopy">
             © {new Date().getFullYear()} Nexora Lift. All rights reserved.
@@ -159,9 +140,9 @@ function HomePage() {
             <NavLink className="btn" to="/contact">
               Book a Free Strategy Call
             </NavLink>
-            <button type="button" className="btn btnGhost">
+            <NavLink className="btn btnGhost" to="/work">
               View Our Work
-            </button>
+            </NavLink>
           </div>
 
           <div className="metrics">
@@ -486,6 +467,75 @@ function ContactPage() {
               This opens your email app to send the message.
             </p>
           </form>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function WorkPage() {
+  const projects = [
+    {
+      title: "E-commerce Brand Relaunch",
+      category: "Brand Strategy & Creative",
+      description: "Complete brand refresh for a fashion retailer, including new positioning, visual identity, and campaign strategy that increased conversions by 40%.",
+      results: "40% conversion increase"
+    },
+    {
+      title: "SaaS Product Launch",
+      category: "Digital Marketing & Growth",
+      description: "End-to-end launch campaign for a B2B SaaS platform, featuring content marketing, paid ads, and PR that drove 500+ qualified leads in the first quarter.",
+      results: "500+ qualified leads"
+    },
+    {
+      title: "Local Business SEO Overhaul",
+      category: "SEO & Performance",
+      description: "Comprehensive SEO strategy for a local service business, optimizing content, technical SEO, and local listings to dominate search results.",
+      results: "300% organic traffic growth"
+    },
+    {
+      title: "Non-Profit Awareness Campaign",
+      category: "Social Impact & Creative",
+      description: "Multi-channel campaign for a non-profit organization, combining social media, influencer partnerships, and events to increase donations by 60%.",
+      results: "60% donation increase"
+    },
+    {
+      title: "Mobile App Marketing",
+      category: "App Marketing & ASO",
+      description: "Performance marketing campaign for a mobile app launch, utilizing app store optimization, paid user acquisition, and retention strategies.",
+      results: "10K+ app downloads"
+    },
+    {
+      title: "B2B Content Strategy",
+      category: "Content Marketing & Lead Gen",
+      description: "Content marketing strategy for a B2B tech company, developing thought leadership content and lead magnets that generated high-quality inbound leads.",
+      results: "150% lead increase"
+    }
+  ]
+
+  return (
+    <section className="section pageSection">
+      <div className="container">
+        <div className="sectionHead sectionHeadCenter">
+          <p className="kicker">Our Work</p>
+          <h2 className="sectionTitle">
+            Projects that drive results.
+          </h2>
+          <p className="sectionLead">
+            From brand transformations to performance campaigns, here are some of the projects
+            we've helped bring to life. Each one showcases our commitment to strategy, creativity, and measurable growth.
+          </p>
+        </div>
+
+        <div className="workGrid">
+          {projects.map((project, index) => (
+            <div key={index} className="workCard">
+              <div className="workCardCategory">{project.category}</div>
+              <h3 className="workCardTitle">{project.title}</h3>
+              <p className="workCardText">{project.description}</p>
+              <div className="workCardResult">{project.results}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
