@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../firebase-config'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { auth, db } from '../firebase-config'
 import { useNavigate, Link } from 'react-router-dom'
+import { AuthContext } from '../contexts/AuthContext'
 import { getFirebaseErrorMessage, validatePassword, validateEmail } from '../utils/errorMessages'
 import './AuthPages.css'
 
 export function RegisterPage() {
+  const { user } = useContext(AuthContext)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,6 +19,10 @@ export function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) navigate('/', { replace: true })
+  }, [user, navigate])
 
   const handlePasswordChange = (value) => {
     setPassword(value)
@@ -67,8 +74,17 @@ export function RegisterPage() {
         displayName: name,
       })
 
-      navigate('/dashboard')
+      // Create user document (Firestore creates the collection automatically)
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        createdAt: serverTimestamp(),
+      })
+
+      navigate('/', { replace: true })
     } catch (err) {
+      console.error('Register failed:', err)
       setError(getFirebaseErrorMessage(err.code))
     } finally {
       setLoading(false)

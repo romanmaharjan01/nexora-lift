@@ -31,6 +31,21 @@ export function DashboardPage() {
             <p><strong>User ID:</strong> {user?.uid}</p>
           </div>
         </div>
+
+        <div className="dashboard-actions">
+          <button 
+            onClick={() => navigate('/messages')}
+            className="action-button messages-btn"
+          >
+            💬 Support Chat
+          </button>
+          <button 
+            onClick={() => navigate('/video-call')}
+            className="action-button video-btn"
+          >
+            📹 Video Call
+          </button>
+        </div>
       </div>
     </div>
   )

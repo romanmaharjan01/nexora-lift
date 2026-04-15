@@ -1,17 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase-config'
 import { useNavigate, Link } from 'react-router-dom'
+import { AuthContext } from '../contexts/AuthContext'
 import { getFirebaseErrorMessage } from '../utils/errorMessages'
 import './AuthPages.css'
 
 export function LoginPage() {
+  const { user } = useContext(AuthContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) navigate('/', { replace: true })
+  }, [user, navigate])
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -20,7 +26,7 @@ export function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      navigate('/dashboard')
+      navigate('/', { replace: true })
     } catch (err) {
       setError(getFirebaseErrorMessage(err.code))
     } finally {
@@ -72,6 +78,10 @@ export function LoginPage() {
           <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          <p className="auth-link">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
         </form>
 
         <p className="auth-link">

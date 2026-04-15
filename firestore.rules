@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User profiles
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId || request.auth != null;
+      allow write: if request.auth.uid == userId;
+    }
+
+    // Client-Admin Conversations
+    match /conversations/{conversationId} {
+      // Only allow the client user or admin to read
+      allow read: if request.auth.uid == resource.data.userId || 
+                     request.auth != null; // Admins can read all
+      
+      // Only the client can create their own conversation
+      allow create: if request.auth != null && 
+                       request.resource.data.type == 'client-admin' &&
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Allow updates to last message
+      allow update: if request.auth.uid == resource.data.userId || 
+                       request.auth != null;
+      
+      allow delete: if false; // Prevent deletion
+
+      // Messages within conversations
+      match /messages/{messageId} {
+        // Client can read their own conversation, admins can read all
+        allow read: if request.auth.uid == get(/databases/$(database)/documents/conversations/$(conversationId)).data.userId || 
+                       request.auth != null;
+        
+        // Any authenticated user can send a message to a conversation
+        allow create: if request.auth != null;
+        
+        // Allow marking as read and adding reactions
+        allow update: if request.auth.uid == resource.data.senderId ||
+                         (request.resource.data.read == true) ||
+                         (request.resource.data.reactions != null);
+        
+        // Only sender can delete their own message
+        allow delete: if request.auth.uid == resource.data.senderId;
+      }
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

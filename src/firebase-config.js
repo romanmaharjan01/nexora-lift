@@ -1,28 +1,29 @@
-import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Replace with your Firebase config from Firebase Console
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyDNBd9xXxXxXxXxXxXxXxXxXxXxXxXxXx',
-  authDomain: 'nexora-lift.firebaseapp.com',
-  projectId: 'nexora-lift',
-  storageBucket: 'nexora-lift.appspot.com',
-  messagingSenderId: '256539194091',
-  appId: '1:256539194091:web:xXxXxXxXxXxXxXxXxXxXxXx',
-}
+  apiKey: "AIzaSyAXpaqlgmqzlYYMwNDOsSlMVg72S6D9SB0",
+  authDomain: "nexora-lift.firebaseapp.com",
+  projectId: "nexora-lift",
+  storageBucket: "nexora-lift.firebasestorage.app",
+  messagingSenderId: "256539194091",
+  appId: "1:256539194091:web:3d0c43ffbbbff73199c4ae",
+  measurementId: "G-CYESSZBJSK"
+};
 
-// Check if using placeholder API key
-if (firebaseConfig.apiKey.includes('xXx') || firebaseConfig.apiKey.includes('AIzaSyDNBd9x')) {
-  console.warn(
-    '⚠️ FIREBASE CONFIG ERROR: API key is using placeholder values!\n' +
-    'To fix this:\n' +
-    '1. Go to https://console.firebase.google.com/project/nexora-lift/settings/general\n' +
-    '2. Select your Web App under "Your apps"\n' +
-    '3. Copy the entire firebaseConfig object\n' +
-    '4. Replace the values in src/firebase-config.js\n\n' +
-    'Currently, Authentication features will not work!'
-  )
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
 
-const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
+export default app;

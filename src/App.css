@@ -557,6 +557,27 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 14px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.heroCardTop::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(179, 155, 97, 0.24) 20%,
+    rgba(179, 155, 97, 0.1) 50%,
+    rgba(179, 155, 97, 0.24) 80%,
+    transparent 100%
+  );
 }
 
 .heroBadge {
@@ -588,6 +609,13 @@
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
+  box-shadow: 0 8px 22px rgba(17, 12, 6, 0.06);
+  transition: transform 0.25s var(--ease-spring), box-shadow 0.35s var(--ease-out-expo),
+    background 0.25s ease, border-color 0.25s ease;
+}
+
+.heroBadgeBtn:hover {
+  box-shadow: 0 16px 34px rgba(179, 155, 97, 0.16);
 }
 
 .heroBadgeActive {
@@ -657,13 +685,13 @@
 }
 
 .heroPanelStage {
-  margin-top: 14px;
+  margin-top: 4px;
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(179, 155, 97, 0.14);
+  box-shadow: 0 10px 28px rgba(17, 12, 6, 0.05) inset;
 }
 
 .heroPanelTrack {
@@ -675,24 +703,30 @@
 }
 
 .heroSlidePane {
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(250, 248, 244, 0.92) 100%
+  );
+  border: 1px solid rgba(179, 155, 97, 0.16);
+  border-radius: 14px;
   padding: 18px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-out-expo),
+    border-color 0.25s ease;
 }
 
 .heroSlidePane:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 18px 44px rgba(179, 155, 97, 0.14);
+  border-color: rgba(179, 155, 97, 0.28);
 }
 
 .heroFoundedText,
 .heroFullLead {
   margin: 0 0 10px;
-  color: rgba(20, 28, 40, 0.9);
-  font-size: 15px;
-  line-height: 1.6;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.68;
 }
 
 .heroFoundedText:last-child {
@@ -715,6 +749,23 @@
   gap: 8px;
   font-size: 12.5px;
   line-height: 1.55;
+}
+
+.heroFullList li {
+  padding-left: 12px;
+  position: relative;
+}
+
+.heroFullList li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  box-shadow: 0 0 0 3px rgba(179, 155, 97, 0.14);
 }
 
 .heroFullList strong {

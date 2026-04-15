@@ -3,11 +3,14 @@ import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import logo from './assets/nexora-logo.png'
 import './App.css'
 import { AuthProvider, AuthContext } from './contexts/AuthContext'
+import { MessagesProvider } from './contexts/MessagesContext'
 import { AdminProvider } from './contexts/AdminContext'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { MessagesProtectedRoute } from './components/MessagesProtectedRoute'
 import AdminProtectedRoute from './components/AdminProtectedRoute'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboard from './pages/AdminDashboard'
@@ -17,12 +20,14 @@ import GoalPage from './pages/GoalPage'
 import MissionPage from './pages/MissionPage'
 import WorkPage from './pages/WorkPage'
 import ContactPage from './pages/ContactPage'
+import MessengerPage from './pages/MessengerPage'
+import VideoCallPage from './pages/VideoCallPage'
 
 function AppContent() {
   const location = useLocation()
   const { user } = useContext(AuthContext)
 
-  const isAuthPage = ['/login', '/register'].includes(location.pathname)
+  const isAuthPage = ['/login', '/register', '/forgot-password'].includes(location.pathname)
   const isAdminPage = ['/admin-login', '/admin-dashboard'].includes(location.pathname)
   const isDashboard = location.pathname === '/dashboard'
   const showLayout = !isAuthPage && !isAdminPage && !isDashboard
@@ -81,7 +86,10 @@ function AppContent() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/messages" element={<MessagesProtectedRoute><MessengerPage /></MessagesProtectedRoute>} />
+          <Route path="/video-call" element={<MessagesProtectedRoute><VideoCallPage /></MessagesProtectedRoute>} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
           <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
           <Route path="/" element={<HomePage />} />
@@ -115,7 +123,9 @@ function App() {
   return (
     <AdminProvider>
       <AuthProvider>
-        <AppContent />
+        <MessagesProvider>
+          <AppContent />
+        </MessagesProvider>
       </AuthProvider>
     </AdminProvider>
   )

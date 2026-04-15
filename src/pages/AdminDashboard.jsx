@@ -54,9 +54,14 @@ export default function AdminDashboard() {
           <h1>Admin Dashboard</h1>
           <p className="admin-welcome">Welcome, {adminUser.name}</p>
         </div>
-        <button className="admin-logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
+        <div className="admin-header-actions">
+          <button className="admin-messages-btn" onClick={() => navigate('/messages')}>
+            💬 View Client Messages
+          </button>
+          <button className="admin-logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Dashboard Content */}
