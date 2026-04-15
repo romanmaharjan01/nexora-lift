@@ -25,13 +25,29 @@ export default function MessengerPage() {
   // For admin: subscribe to all conversations
   useEffect(() => {
     if (adminUser) {
+      console.log('[MessengerPage] Admin subscribing to conversations');
       const unsubscribe = subscribeToAdminConversations((convs) => {
+        console.log('[MessengerPage] Received', convs.length, 'conversations');
         setConversations(convs);
         if (!selectedConversation && convs.length > 0) {
           setSelectedConversation(convs[0].id);
         }
       });
       return unsubscribe;
+    }
+  }, [adminUser, selectedConversation]);
+
+  // For admin: subscribe to selected conversation messages
+  useEffect(() => {
+    if (adminUser && selectedConversation) {
+      console.log('[MessengerPage] Admin subscribing to messages for:', selectedConversation);
+      const unsubscribe = subscribeToAdminMessages(selectedConversation, (msgList) => {
+        console.log('[MessengerPage] Received', msgList.length, 'messages for conversation');
+        setSelectedConvMessages(msgList);
+      });
+      return unsubscribe;
+    } else {
+      setSelectedConvMessages([]);
     }
   }, [adminUser, selectedConversation]);
 

@@ -1,29 +1,34 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { AdminContext } from '../contexts/AdminContext';
 import './VideoCallPage.css';
 
 export default function VideoCallPage() {
   const { user } = useContext(AuthContext);
+  const { adminUser } = useContext(AdminContext);
+  const currentUser = user || adminUser;
+  const userId = user?.uid || adminUser?.id || 'user';
+
   const [roomName, setRoomName] = useState('');
   const [isInCall, setIsInCall] = useState(false);
   const [generatedRoomName, setGeneratedRoomName] = useState('');
 
-  useEffect(() => {
-    // Load Jitsi Meet API script
-    if (!window.JitsiMeetExternalAPI) {
-      const script = document.createElement('script');
-      script.src = 'https://meet.jitsi.com/external_api.js';
-      document.head.appendChild(script);
-    }
-  }, []);
+  const iframeRef = useRef(null);
 
   const generateRoomName = () => {
-    // Generate a unique room name
-    const name =
-      roomName.trim() ||
-      `call-${user?.uid?.substring(0, 6)}-${Math.random().toString(36).substring(7)}`;
+    const name = roomName.trim()
+      ? roomName.trim()
+      : `nexora-call-${userId.substring(0, 8)}-${Math.random().toString(36).substring(2, 10)}`;
+
     setGeneratedRoomName(name);
     setIsInCall(true);
+  };
+
+  const copyRoomLink = () => {
+    const link = `${window.location.origin}/dashboard?room=${generatedRoomName}`;
+    navigator.clipboard.writeText(link).then(() => {
+      alert('✅ Room link copied! Share this with the admin / client.');
+    });
   };
 
   const endCall = () => {
@@ -32,7 +37,7 @@ export default function VideoCallPage() {
     setRoomName('');
   };
 
-  if (!user) {
+  if (!currentUser) {
     return (
       <div className="video-call-container">
         <p>Please log in to start a video call</p>
@@ -44,7 +49,7 @@ export default function VideoCallPage() {
     <div className="video-call-container">
       {!isInCall ? (
         <div className="call-setup">
-          <h1>Video Call</h1>
+          <h1>📹 Video Call</h1>
           <div className="setup-form">
             <input
               type="text"
@@ -57,67 +62,39 @@ export default function VideoCallPage() {
               Start Video Call
             </button>
             <p className="help-text">
-              Leave empty to generate a random room, or enter a specific room name to share with
-              others
+              Leave empty for a random room or enter a name to share with the other person.
             </p>
-          </div>
-
-          <div className="call-info">
-            <h2>How it works:</h2>
-            <ul>
-              <li>Enter a room name or leave empty for a random one</li>
-              <li>Share the room name with others to join your call</li>
-              <li>No signup needed - it's completely free</li>
-              <li>Supports audio, video, and screen sharing</li>
-            </ul>
           </div>
         </div>
       ) : (
         <div className="call-active">
           <div className="call-header">
             <h2>Room: {generatedRoomName}</h2>
-            <button onClick={endCall} className="end-call-btn">
-              End Call
-            </button>
+            <div>
+              <button onClick={copyRoomLink} className="copy-btn">📋 Copy Link</button>
+              <button onClick={endCall} className="end-call-btn">End Call</button>
+            </div>
           </div>
-          <JitsiMeetComponent roomName={generatedRoomName} userName={user.displayName || 'User'} />
+
+          <div className="jitsi-iframe-wrapper">
+            <iframe
+              ref={iframeRef}
+              src={`https://meet.jit.si/${generatedRoomName}#userInfo.displayName=${encodeURIComponent(
+                currentUser.displayName || currentUser.name || 'User'
+              )}&config.startWithAudioMuted=false&config.startWithVideoMuted=false`}
+              allow="camera; microphone; fullscreen; display-capture"
+              style={{
+                width: '100%',
+                height: 'calc(100vh - 180px)',
+                border: 'none',
+                borderRadius: '8px',
+                background: '#000',
+              }}
+              title="Video Call"
+            />
+          </div>
         </div>
       )}
     </div>
   );
-}
-
-function JitsiMeetComponent({ roomName, userName }) {
-  const containerRef = useState(null)[1];
-
-  useEffect(() => {
-    const container = document.getElementById('jitsi-meet-container');
-    if (!container || !window.JitsiMeetExternalAPI) return;
-
-    const options = {
-      roomName: roomName,
-      width: '100%',
-      height: '100%',
-      parentNode: container,
-      configOverwrite: {
-        startWithAudioMuted: false,
-        startWithVideoMuted: false,
-        enableWelcomePage: false,
-      },
-      interfaceConfigOverwrite: {
-        HIDE_INVITE_MORE_HEADER: true,
-      },
-      userInfo: {
-        displayName: userName,
-      },
-    };
-
-    const api = new window.JitsiMeetExternalAPI('meet.jitsi.com', options);
-
-    return () => {
-      api.dispose();
-    };
-  }, [roomName, userName]);
-
-  return <div id="jitsi-meet-container" className="jitsi-container" />;
 }

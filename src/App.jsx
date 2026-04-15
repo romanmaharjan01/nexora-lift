@@ -10,7 +10,6 @@ import { RegisterPage } from './pages/RegisterPage'
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
-import { MessagesProtectedRoute } from './components/MessagesProtectedRoute'
 import AdminProtectedRoute from './components/AdminProtectedRoute'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboard from './pages/AdminDashboard'
@@ -20,8 +19,6 @@ import GoalPage from './pages/GoalPage'
 import MissionPage from './pages/MissionPage'
 import WorkPage from './pages/WorkPage'
 import ContactPage from './pages/ContactPage'
-import MessengerPage from './pages/MessengerPage'
-import VideoCallPage from './pages/VideoCallPage'
 
 function AppContent() {
   const location = useLocation()
@@ -88,8 +85,6 @@ function AppContent() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/messages" element={<MessagesProtectedRoute><MessengerPage /></MessagesProtectedRoute>} />
-          <Route path="/video-call" element={<MessagesProtectedRoute><VideoCallPage /></MessagesProtectedRoute>} />
           <Route path="/admin-login" element={<AdminLoginPage />} />
           <Route path="/admin-dashboard" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
           <Route path="/" element={<HomePage />} />

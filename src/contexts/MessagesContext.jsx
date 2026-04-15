@@ -42,11 +42,15 @@ export function MessagesProvider({ children }) {
   // Subscribe to admin conversation messages
   useEffect(() => {
     if (!adminConversation) {
+      console.log('[MessagesContext] No conversation yet');
       setMessages([]);
       return;
     }
 
+    console.log('[MessagesContext] Setting up real-time listener for:', adminConversation);
+    
     const unsubscribe = subscribeToAdminMessages(adminConversation, (messagesList) => {
+      console.log('[MessagesContext] Received', messagesList.length, 'messages');
       setMessages(messagesList);
 
       // Calculate unread count
@@ -54,7 +58,10 @@ export function MessagesProvider({ children }) {
       setUnreadCount(unread.length);
     });
 
-    return unsubscribe;
+    return () => {
+      console.log('[MessagesContext] Cleaning up listener for:', adminConversation);
+      unsubscribe();
+    };
   }, [adminConversation, user]);
 
   return (

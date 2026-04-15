@@ -749,7 +749,38 @@
     min-height: 500px;
   }
 }
+/* Admin Tab Styles */
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid rgba(179, 155, 97, 0.2);
+  flex-wrap: wrap;
+}
 
+.admin-tab-button {
+  padding: 14px 28px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #6a6a6a;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+
+.admin-tab-button:hover {
+  color: #1a1a1a;
+}
+
+.admin-tab-button.active {
+  color: #b39b61;
+  border-bottom-color: #b39b61;
+}
 @media (max-width: 768px) {
   .admin-dashboard-header {
     flex-direction: column;

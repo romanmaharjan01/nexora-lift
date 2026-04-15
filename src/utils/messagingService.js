@@ -27,9 +27,11 @@ export const getAdminConversation = async (userId, userName = 'User') => {
   const conversationRef = doc(db, 'conversations', conversationId);
   
   try {
+    console.log('[messagingService] Getting conversation:', conversationId);
     const conversationSnap = await getDoc(conversationRef);
     if (!conversationSnap.exists()) {
       // Create a new conversation
+      console.log('[messagingService] Creating new conversation:', conversationId);
       await setDoc(conversationRef, {
         userId, // The client user ID
         userName, // The client's display name
@@ -38,9 +40,11 @@ export const getAdminConversation = async (userId, userName = 'User') => {
         lastMessage: null,
         lastMessageTime: serverTimestamp(),
       });
+    } else {
+      console.log('[messagingService] Conversation already exists:', conversationId);
     }
   } catch (error) {
-    console.error('Error creating/getting conversation:', error);
+    console.error('[messagingService] Error creating/getting conversation:', error);
     throw error;
   }
 
@@ -50,6 +54,7 @@ export const getAdminConversation = async (userId, userName = 'User') => {
 // Send message to admin
 export const sendMessageToAdmin = async (conversationId, senderId, senderName, text) => {
   try {
+    console.log('[messagingService] Sending message to:', conversationId);
     const messagesRef = collection(db, 'conversations', conversationId, 'messages');
     const messageDoc = await addDoc(messagesRef, {
       senderId,
@@ -67,9 +72,10 @@ export const sendMessageToAdmin = async (conversationId, senderId, senderName, t
       lastMessageTime: serverTimestamp(),
     });
 
+    console.log('[messagingService] Message sent successfully:', messageDoc.id);
     return messageDoc.id;
   } catch (error) {
-    console.error('Error sending message:', error);
+    console.error('[messagingService] Error sending message:', error);
     throw error;
   }
 };
@@ -121,16 +127,24 @@ export const subscribeToAdminMessages = (conversationId, callback) => {
   const messagesRef = collection(db, 'conversations', conversationId, 'messages');
   const q = query(messagesRef, orderBy('timestamp', 'asc'));
 
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    const messages = [];
-    snapshot.forEach((doc) => {
-      messages.push({ id: doc.id, ...doc.data() });
-    });
-    callback(messages);
-  });
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      const messages = [];
+      snapshot.forEach((doc) => {
+        messages.push({ id: doc.id, ...doc.data() });
+      });
+      console.log(`[REAL-TIME] Updated ${conversationId} with ${messages.length} messages`);
+      callback(messages);
+    },
+    (error) => {
+      console.error(`[REAL-TIME ERROR] Failed to subscribe to ${conversationId}:`, error);
+      callback([]);
+    }
+  );
 
   return unsubscribe;
-};
+}
 
 // Get all client-admin conversations (for admin view)
 export const getAdminConversations = async () => {
@@ -160,13 +174,21 @@ export const subscribeToAdminConversations = (callback) => {
     orderBy('lastMessageTime', 'desc')
   );
 
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    const conversations = [];
-    snapshot.forEach((doc) => {
-      conversations.push({ id: doc.id, ...doc.data() });
-    });
-    callback(conversations);
-  });
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      const conversations = [];
+      snapshot.forEach((doc) => {
+        conversations.push({ id: doc.id, ...doc.data() });
+      });
+      console.log('[CONVERSATIONS] Updated with', conversations.length, 'conversations');
+      callback(conversations);
+    },
+    (error) => {
+      console.error('[CONVERSATIONS ERROR] Failed to subscribe:', error);
+      callback([]);
+    }
+  );
 
   return unsubscribe;
 };
