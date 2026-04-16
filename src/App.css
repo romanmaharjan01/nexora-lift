@@ -176,7 +176,8 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .navLink {
@@ -185,10 +186,11 @@
   background: transparent;
   border: none;
   font-weight: 600;
-  font-size: 14px;
-  padding: 10px 12px;
+  font-size: 12px;
+  padding: 8px 12px;
   border-radius: 12px;
   position: relative;
+  white-space: nowrap;
   transition: color 0.25s var(--ease-out-expo), background 0.25s var(--ease-out-expo),
     box-shadow 0.35s var(--ease-out-expo);
 }
@@ -376,8 +378,10 @@
 }
 
 .btnSmall {
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 12px;
+  white-space: nowrap;
+  font-size: 12px;
 }
 
 .hero {
@@ -1297,7 +1301,7 @@
   flex: 1 1 auto;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1180px) {
   .nav {
     display: none;
   }

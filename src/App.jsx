@@ -16,6 +16,9 @@ import AdminDashboard from './pages/AdminDashboard'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import GoalPage from './pages/GoalPage'
+import DataLedPerformancePage from './pages/DataLedPerformancePage'
+import CreativeAdvantagePage from './pages/CreativeAdvantagePage'
+import StrategicPartnershipPage from './pages/StrategicPartnershipPage'
 import MissionPage from './pages/MissionPage'
 import WorkPage from './pages/WorkPage'
 import ContactPage from './pages/ContactPage'
@@ -45,16 +48,16 @@ function AppContent() {
             </NavLink>
 
             <nav className="nav" aria-label="Primary navigation">
-              <TopNavLink to="/" end>Home</TopNavLink>
-              <TopNavLink to="/about">About</TopNavLink>
-              <TopNavLink to="/goal">Our Goal</TopNavLink>
-              <TopNavLink to="/mission">Mission</TopNavLink>
+              <TopNavLink to="/" end>Back to Reality</TopNavLink>
+              <TopNavLink to="/about">Who Even Are We?</TopNavLink>
+              <TopNavLink to="/goal">What We Think We’re Doing</TopNavLink>
+              <TopNavLink to="/mission">Big Words Section</TopNavLink>
               {user ? (
                 <NavLink className="btn btnSmall" to="/dashboard">Dashboard</NavLink>
               ) : (
-                <NavLink className="btn btnSmall" to="/login">Login</NavLink>
+                <NavLink className="btn btnSmall" to="/login">Prove You Exist</NavLink>
               )}
-              <NavLink className="btn btnSmall" to="/contact">Let's Talk</NavLink>
+              <NavLink className="btn btnSmall" to="/contact">Complain Here</NavLink>
             </nav>
 
             <details className="navMobile">
@@ -62,16 +65,16 @@ function AppContent() {
                 <span className="hamburger" aria-hidden="true" />
               </summary>
               <div className="navMobilePanel">
-                <MobileNavLink to="/" currentPath={location.pathname}>Home</MobileNavLink>
-                <MobileNavLink to="/about" currentPath={location.pathname}>About</MobileNavLink>
-                <MobileNavLink to="/goal" currentPath={location.pathname}>Our Goal</MobileNavLink>
-                <MobileNavLink to="/mission" currentPath={location.pathname}>Mission</MobileNavLink>
+                <MobileNavLink to="/" currentPath={location.pathname}>Back to Reality</MobileNavLink>
+                <MobileNavLink to="/about" currentPath={location.pathname}>Who Even Are We?</MobileNavLink>
+                <MobileNavLink to="/goal" currentPath={location.pathname}>What We Think We’re Doing</MobileNavLink>
+                <MobileNavLink to="/mission" currentPath={location.pathname}>Big Words Section</MobileNavLink>
                 {user ? (
                   <MobileNavLink to="/dashboard" currentPath={location.pathname}>Dashboard</MobileNavLink>
                 ) : (
-                  <MobileNavLink to="/login" currentPath={location.pathname}>Login</MobileNavLink>
+                  <MobileNavLink to="/login" currentPath={location.pathname}>Prove You Exist</MobileNavLink>
                 )}
-                <NavLink className="btn" to="/contact">Book a Call</NavLink>
+                <NavLink className="btn" to="/contact">Complain Here</NavLink>
               </div>
             </details>
           </div>
@@ -90,6 +93,9 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/goal" element={<GoalPage />} />
+          <Route path="/goal/data-led-performance" element={<DataLedPerformancePage />} />
+          <Route path="/goal/creative-advantage" element={<CreativeAdvantagePage />} />
+          <Route path="/goal/strategic-partnership" element={<StrategicPartnershipPage />} />
           <Route path="/mission" element={<MissionPage />} />
           <Route path="/work" element={<WorkPage />} />
           <Route path="/contact" element={<ContactPage />} />
